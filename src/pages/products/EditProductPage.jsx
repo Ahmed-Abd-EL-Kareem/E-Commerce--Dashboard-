@@ -990,7 +990,7 @@ export default function EditProductPage() {
                       {!brandsLoading &&
                         brands?.map((brand) => (
                           <option key={brand._id} value={brand._id}>
-                            {brand.name}
+                            {getLocalizedText(brand.name, lang)}
                           </option>
                         ))}
                     </select>

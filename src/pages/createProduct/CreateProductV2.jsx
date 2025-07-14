@@ -732,7 +732,7 @@ const ProductCreationForm = ({ defaultValues, onSubmitSuccess }) => {
               allBrands.map((brand) => (
                 <option key={brand._id} value={brand._id}>
                   {brand.logoUrl ? "🖼️ " : ""}
-                  {brand.name}
+                  {getLocalizedText(brand.name, lang)}
                 </option>
               ))}
           </select>
