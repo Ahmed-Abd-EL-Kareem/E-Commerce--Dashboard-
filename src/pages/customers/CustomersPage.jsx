@@ -49,13 +49,13 @@ const CustomersPage = () => {
   const { data: customers = [], isLoading } = useQuery({
     queryKey: ["customers"],
     queryFn: async () => {
-      const response = await axios.get(`${base_url}/api/user`);
+      const response = await axios.get(`${base_url}/api/users`);
       return response.data.data.users;
     },
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => axios.delete(`${base_url}/api/user/${id}`),
+    mutationFn: (id) => axios.delete(`${base_url}/api/users/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries(["customers"]);
       toast.success("User deleted successfully");
@@ -66,11 +66,11 @@ const CustomersPage = () => {
     mutationFn: (data) => {
       if (selectedCustomer) {
         return axios.patch(
-          `${base_url}/api/user/${selectedCustomer._id}`,
+          `${base_url}/api/users/${selectedCustomer._id}`,
           data
         );
       }
-      return axios.post(`${base_url}/api/user`, data);
+      return axios.post(`${base_url}/api/users`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["customers"]);
@@ -82,7 +82,6 @@ const CustomersPage = () => {
       );
     },
     onError: (error) => {
-      console.log(error);
       toast.error(error.response.data.message);
     },
   });
