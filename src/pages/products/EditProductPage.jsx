@@ -81,8 +81,8 @@ const productSchema = yup.object().shape({
             ar: yup.string().required("Arabic color name is required"),
           }),
           colorHex: yup.string(),
-          storage: yup.string().required("Storage is required"),
-          ram: yup.string().required("RAM is required"),
+          storage: yup.string(),
+          ram: yup.string(),
           price: yup
             .number()
             .required("Price is required")
