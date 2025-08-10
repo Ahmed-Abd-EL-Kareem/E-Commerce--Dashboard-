@@ -106,14 +106,6 @@ This project is configured for deployment on Vercel with the included `vercel.js
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
 
-### 🔧 Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-VITE_API_BASE_URL=your_api_url
-```
-
 ### 🤝 Contributing
 
 1. Fork the repository
@@ -224,14 +216,6 @@ src/
 - `npm run build` - البناء للإنتاج
 - `npm run preview` - معاينة بناء الإنتاج
 - `npm run lint` - تشغيل ESLint
-
-### 🔧 متغيرات البيئة
-
-أنشئ ملف `.env` في الدليل الجذر:
-
-```env
-VITE_API_BASE_URL=your_api_url
-```
 
 ### 🤝 المساهمة
 
