@@ -40,6 +40,7 @@ const LoginPage = () => {
     } catch (error) {
       // Error handled in AuthContext
       console.error("Login error:", error);
+
     } finally {
       setIsLoading(false);
     }

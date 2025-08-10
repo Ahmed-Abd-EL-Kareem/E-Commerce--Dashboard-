@@ -5,6 +5,21 @@ import axios from "axios";
 import { base_url } from "../../constants/axiosConfig";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
+// دالة استخراج النص المناسب حسب اللغة
+const getLocalizedText = (obj, lang, fallback = "") => {
+  if (!obj) return fallback;
+  if (typeof obj === "string") return obj;
+  if (typeof obj === "object" && obj !== null) {
+    if (obj[lang] && typeof obj[lang] === "string" && obj[lang].trim())
+      return obj[lang].trim();
+    if (obj.en && typeof obj.en === "string" && obj.en.trim())
+      return obj.en.trim();
+    if (obj.ar && typeof obj.ar === "string" && obj.ar.trim())
+      return obj.ar.trim();
+  }
+  return fallback;
+};
+
 const BrandsPage = () => {
   const queryClient = useQueryClient();
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -14,6 +29,23 @@ const BrandsPage = () => {
   const [brandToDelete, setBrandToDelete] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lang, setLang] = useState(localStorage.getItem("language") || "en");
+
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      const newLang = localStorage.getItem("language") || "en";
+      setLang(newLang);
+    };
+
+    window.addEventListener("languageChanged", handleLanguageChange);
+
+    // Set initial language
+    handleLanguageChange();
+
+    return () => {
+      window.removeEventListener("languageChanged", handleLanguageChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -40,8 +72,13 @@ const BrandsPage = () => {
 
   const filteredBrands = brands.filter(
     (brand) =>
-      brand.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      brand.description.toLowerCase().includes(searchTerm.toLowerCase())
+      getLocalizedText(brand.name, lang, "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (brand.description &&
+        getLocalizedText(brand.description, lang, "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()))
   );
 
   const deleteBrandMutation = useMutation({
@@ -115,14 +152,23 @@ const BrandsPage = () => {
     setIsSubmitting(true);
     const formData = new FormData();
 
-    const name = e.target.name.value;
-    const description = e.target.description.value;
+    const nameInput = (e.target.name.value || "").trim();
+    const descriptionInput = (e.target.description.value || "").trim();
     const website = e.target.website.value;
     const status = e.target.status.value;
     const logoFile = e.target.logo.files[0];
 
-    formData.append("name", name);
-    formData.append("description", description);
+    // Get name values from form fields
+    const nameEn = (e.target.nameEn?.value || "").trim();
+    const nameAr = (e.target.nameAr?.value || "").trim();
+
+    // Use English name for slug generation
+    const nameForSlug = nameEn || nameAr || nameInput;
+
+    formData.append("name", nameForSlug);
+    formData.append("name[en]", nameEn);
+    formData.append("name[ar]", nameAr);
+    formData.append("description", descriptionInput);
     formData.append("websiteUrl", website);
     formData.append("status", status);
 
@@ -262,7 +308,7 @@ const BrandsPage = () => {
                     {brand.logoUrl && (
                       <img
                         src={brand.logoUrl}
-                        alt={brand.name}
+                        alt={getLocalizedText(brand.name, lang)}
                         className="h-10 w-10 rounded-full mr-3 object-cover"
                         onError={(e) => {
                           e.target.style.display = "none";
@@ -270,13 +316,13 @@ const BrandsPage = () => {
                       />
                     )}
                     <div className="text-sm font-medium text-gray-900">
-                      {brand.name}
+                      {getLocalizedText(brand.name, lang)}
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-sm text-gray-500 max-w-xs truncate">
-                    {brand.description}
+                    {getLocalizedText(brand.description, lang)}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -368,21 +414,47 @@ const BrandsPage = () => {
                 {/* Content */}
                 <div className="bg-white px-6 py-4">
                   <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        defaultValue={selectedBrand?.name || ""}
-                        className="mt-1 p-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                        required
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label
+                          htmlFor="nameEn"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Name (English)
+                        </label>
+                        <input
+                          type="text"
+                          id="nameEn"
+                          name="nameEn"
+                          defaultValue={
+                            selectedBrand
+                              ? getLocalizedText(selectedBrand.name, "en")
+                              : ""
+                          }
+                          className="mt-1 p-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="nameAr"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Name (Arabic)
+                        </label>
+                        <input
+                          type="text"
+                          id="nameAr"
+                          name="nameAr"
+                          defaultValue={
+                            selectedBrand
+                              ? getLocalizedText(selectedBrand.name, "ar")
+                              : ""
+                          }
+                          className="mt-1 p-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                          required
+                        />
+                      </div>
                     </div>
 
                     <div>
@@ -396,7 +468,11 @@ const BrandsPage = () => {
                         id="description"
                         name="description"
                         rows={3}
-                        defaultValue={selectedBrand?.description || ""}
+                        defaultValue={
+                          selectedBrand
+                            ? getLocalizedText(selectedBrand.description, lang)
+                            : ""
+                        }
                         className="mt-1 p-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
                       />
                     </div>
@@ -598,7 +674,7 @@ const BrandsPage = () => {
                     <p className="text-sm text-gray-500">
                       Are you sure you want to delete{" "}
                       <span className="font-semibold text-gray-900">
-                        {brandToDelete.name}
+                        {getLocalizedText(brandToDelete.name, lang)}
                       </span>
                       ? This action cannot be undone and will permanently delete
                       this brand from the system.

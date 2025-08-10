@@ -6,7 +6,7 @@ import {
   useState,
   useEffect,
 } from "react";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import { jwtDecode } from "jwt-decode";
 import { base_url } from "../constants/axiosConfig";
 
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
         try {
           const user = jwtDecode(token);
           // Add axios default header
-          axios.defaults.headers.common["Authorization"] = `${token}`;
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
           dispatch({ type: "LOGIN", payload: user });
         } catch (err) {
           console.error(err);

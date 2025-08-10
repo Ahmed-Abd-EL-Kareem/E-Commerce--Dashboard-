@@ -135,7 +135,7 @@ export default function CreateProduct() {
   );
 
   const handleBack = () => {
-    navigate("/products");
+    navigate("/dashboard/products");
   };
 
   const handleCoverImageChange = (e) => {

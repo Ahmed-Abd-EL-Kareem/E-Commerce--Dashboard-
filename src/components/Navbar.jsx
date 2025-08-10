@@ -18,8 +18,10 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "../hooks/useTranslation";
 
 export default function Navbar() {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -27,97 +29,97 @@ export default function Navbar() {
 
   const categories = [
     {
-      name: "Smartphones",
+      name: t('categories.smartphones'),
       icon: Smartphone,
       color: "text-blue-500",
       subcategories: [
-        "iPhone",
-        "Samsung",
-        "Google Pixel",
-        "OnePlus",
-        "Xiaomi",
-        "Accessories",
+        t('categories.iphone'),
+        t('categories.samsung'),
+        t('categories.googlePixel'),
+        t('categories.onePlus'),
+        t('categories.xiaomi'),
+        t('categories.accessories'),
       ],
     },
     {
-      name: "Laptops",
+      name: t('categories.laptops'),
       icon: Laptop,
       color: "text-green-500",
       subcategories: [
-        "MacBook",
-        "Windows Laptops",
-        "Gaming Laptops",
-        "Business Laptops",
-        "Accessories",
+        t('categories.macbook'),
+        t('categories.windowsLaptops'),
+        t('categories.gamingLaptops'),
+        t('categories.businessLaptops'),
+        t('categories.accessories'),
       ],
     },
     {
-      name: "Audio",
+      name: t('categories.audio'),
       icon: Headphones,
       color: "text-purple-500",
       subcategories: [
-        "Headphones",
-        "Earbuds",
-        "Speakers",
-        "Sound Systems",
-        "Accessories",
+        t('categories.headphones'),
+        t('categories.earbuds'),
+        t('categories.speakers'),
+        t('categories.soundSystems'),
+        t('categories.accessories'),
       ],
     },
     {
-      name: "Cameras",
+      name: t('categories.cameras'),
       icon: Camera,
       color: "text-red-500",
       subcategories: [
-        "DSLR",
-        "Mirrorless",
-        "Action Cameras",
-        "Lenses",
-        "Accessories",
+        t('categories.dslr'),
+        t('categories.mirrorless'),
+        t('categories.actionCameras'),
+        t('categories.lenses'),
+        t('categories.accessories'),
       ],
     },
     {
-      name: "Gaming",
+      name: t('categories.gaming'),
       icon: Gamepad2,
       color: "text-orange-500",
       subcategories: [
-        "Gaming Consoles",
-        "Gaming PCs",
-        "Gaming Accessories",
-        "Gaming Chairs",
-        "Games",
+        t('categories.gamingConsoles'),
+        t('categories.gamingPCs'),
+        t('categories.gamingAccessories'),
+        t('categories.gamingChairs'),
+        t('categories.games'),
       ],
     },
     {
-      name: "TV & Home",
+      name: t('categories.tvHome'),
       icon: Tv,
       color: "text-indigo-500",
       subcategories: [
-        "Smart TVs",
-        "Home Theater",
-        "Streaming Devices",
-        "TV Accessories",
+        t('categories.smartTVs'),
+        t('categories.homeTheater'),
+        t('categories.streamingDevices'),
+        t('categories.tvAccessories'),
       ],
     },
     {
-      name: "Wearables",
+      name: t('categories.wearables'),
       icon: Watch,
       color: "text-pink-500",
       subcategories: [
-        "Smartwatches",
-        "Fitness Trackers",
-        "Smart Rings",
-        "Accessories",
+        t('categories.smartwatches'),
+        t('categories.fitnessTrackers'),
+        t('categories.smartRings'),
+        t('categories.accessories'),
       ],
     },
     {
-      name: "Speakers",
+      name: t('categories.speakers'),
       icon: Speaker,
       color: "text-teal-500",
       subcategories: [
-        "Bluetooth Speakers",
-        "Smart Speakers",
-        "Home Audio",
-        "Portable Speakers",
+        t('categories.bluetoothSpeakers'),
+        t('categories.smartSpeakers'),
+        t('categories.homeAudio'),
+        t('categories.portableSpeakers'),
       ],
     },
   ];
@@ -135,28 +137,28 @@ export default function Navbar() {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center py-2 text-sm">
             <div className="hidden md:flex space-x-6">
-              <span>Free shipping on orders over $99</span>
+              <span>{t('navbar.freeShipping')}</span>
               <span>•</span>
-              <span>24/7 Customer Support</span>
+              <span>{t('navbar.customerSupport')}</span>
             </div>
             <div className="flex space-x-4">
               <a
                 href="#"
                 className="hover:text-primary-focus transition-colors"
               >
-                Track Order
+                {t('navbar.trackOrder')}
               </a>
               <a
                 href="#"
                 className="hover:text-primary-focus transition-colors"
               >
-                Help
+                {t('navbar.help')}
               </a>
               <a
                 href="#"
                 className="hover:text-primary-focus transition-colors"
               >
-                Sign In
+                {t('auth.signIn')}
               </a>
             </div>
           </div>
@@ -198,7 +200,7 @@ export default function Navbar() {
                 >
                   <input
                     type="text"
-                    placeholder="Search for electronics..."
+                    placeholder={t('navbar.searchPlaceholder')}
                     className="flex-1 px-6 py-3 rounded-l-full focus:outline-none text-gray-700 bg-transparent"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -210,22 +212,22 @@ export default function Navbar() {
                     className="px-6 py-3 bg-primary text-white rounded-r-full hover:bg-primary-focus transition-colors duration-200 flex items-center space-x-2"
                   >
                     <Search size={20} />
-                    <span className="hidden sm:inline">Search</span>
+                    <span className="hidden sm:inline">{t('common.search')}</span>
                   </button>
                 </div>
                 {searchQuery && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-4">
                     <div className="space-y-2">
-                      <p className="text-sm text-gray-500">Popular Searches</p>
+                      <p className="text-sm text-gray-500">{t('navbar.popularSearches')}</p>
                       <div className="flex flex-wrap gap-2">
                         <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition-colors">
-                          iPhone 15
+                          {t('products.iphone15')}
                         </button>
                         <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition-colors">
-                          MacBook Pro
+                          {t('products.macbookPro')}
                         </button>
                         <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition-colors">
-                          AirPods Pro
+                          {t('products.airpodsPro')}
                         </button>
                       </div>
                     </div>
@@ -255,7 +257,7 @@ export default function Navbar() {
                       <div className="flex items-center w-full rounded-full border-2 border-gray-200 focus-within:border-primary focus-within:shadow-lg transition-all duration-200">
                         <input
                           type="text"
-                          placeholder="Search..."
+                          placeholder={t('common.search')}
                           className="w-full px-4 py-2 rounded-l-full focus:outline-none text-gray-700 bg-transparent"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
@@ -271,17 +273,17 @@ export default function Navbar() {
                         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-4">
                           <div className="space-y-2">
                             <p className="text-sm text-gray-500">
-                              Popular Searches
+                              {t('navbar.popularSearches')}
                             </p>
                             <div className="flex flex-wrap gap-2">
                               <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition-colors">
-                                iPhone 15
+                                {t('products.iphone15')}
                               </button>
                               <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition-colors">
-                                MacBook Pro
+                                {t('products.macbookPro')}
                               </button>
                               <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm transition-colors">
-                                AirPods Pro
+                                {t('products.airpodsPro')}
                               </button>
                             </div>
                           </div>

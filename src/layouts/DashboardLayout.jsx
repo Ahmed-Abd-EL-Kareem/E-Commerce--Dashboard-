@@ -13,22 +13,56 @@ import {
   FiGrid,
   FiLogOut,
 } from "react-icons/fi";
+import { PiShoppingBag } from "react-icons/pi";
 import Button from "../components/Button";
 import { useAuth } from "../contexts/AuthContext";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: FiHome },
-  { name: "Orders", href: "/dashboard/orders", icon: FiShoppingCart },
-  { name: "Products", href: "/dashboard/products", icon: FiPackage },
   { name: "Categories", href: "/dashboard/categories", icon: FiGrid },
   { name: "Brands", href: "/dashboard/brands", icon: FiTag },
+  { name: "Products", href: "/dashboard/products", icon: FiPackage },
+  { name: "Orders", href: "/dashboard/orders", icon: PiShoppingBag },
+  { name: "Cart", href: "/dashboard/cart", icon: FiShoppingCart },
   { name: "Customers", href: "/dashboard/customers", icon: FiUsers },
 ];
+import { useTranslation } from "../hooks/useTranslation";
 
 const DashboardLayout = () => {
+  const { t } = useTranslation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
+
+  const navigation = [
+    { name: t("dashboard.dashboard"), href: "/dashboard", icon: FiHome },
+    {
+      name: t("dashboard.orders"),
+      href: "/dashboard/orders",
+      icon: FiShoppingCart,
+    },
+    {
+      name: t("dashboard.cart"),
+      href: "/dashboard/cart",
+      icon: FiShoppingCart,
+    },
+    {
+      name: t("dashboard.products"),
+      href: "/dashboard/products",
+      icon: FiPackage,
+    },
+    {
+      name: t("dashboard.categories"),
+      href: "/dashboard/categories",
+      icon: FiGrid,
+    },
+    { name: t("dashboard.brands"), href: "/dashboard/brands", icon: FiTag },
+    {
+      name: t("dashboard.customers"),
+      href: "/dashboard/customers",
+      icon: FiUsers,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-100 ">
@@ -45,7 +79,7 @@ const DashboardLayout = () => {
         <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white">
           <div className="flex h-16 items-center justify-between px-4">
             <h1 className="text-xl font-semibold text-gray-900 ">
-              Admin Dashboard
+              {t("dashboard.title")}
             </h1>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -95,7 +129,7 @@ const DashboardLayout = () => {
                   onClick={logout}
                   className="text-xs text-gray-500 hover:text-gray-700 "
                 >
-                  Sign out
+                  {t("dashboard.signOut")}
                 </button>
               </div>
             </div>
@@ -108,7 +142,7 @@ const DashboardLayout = () => {
         <div className="flex min-h-0 flex-1 flex-col border-r border-gray-200  bg-white ">
           <div className="flex h-16 items-center px-4">
             <h1 className="text-xl font-semibold text-gray-900 ">
-              Admin Dashboard
+              {t("dashboard.title")}
             </h1>
           </div>
           <nav className="flex-1 space-y-1 px-2 py-4">
@@ -152,7 +186,7 @@ const DashboardLayout = () => {
                   className="text-xs text-red-500 hover:text-red-700 font-bold cursor-pointer flex items-center gap-2"
                 >
                   <FiLogOut />
-                  Sign out
+                  {t("dashboard.signOut")}
                 </button>
               </div>
             </div>
@@ -174,7 +208,7 @@ const DashboardLayout = () => {
             <div className="flex flex-1">
               <h2 className="text-2xl font-semibold text-gray-900 my-auto">
                 {navigation.find((item) => item.href === location.pathname)
-                  ?.name || "Dashboard"}
+                  ?.name || t("dashboard.dashboard")}
               </h2>
             </div>
           </div>
