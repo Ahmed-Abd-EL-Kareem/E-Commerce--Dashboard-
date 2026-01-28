@@ -34,7 +34,7 @@ const LoginPage = () => {
         if (user.role === "admin") {
           navigate("/dashboard");
         } else {
-          navigate("/");
+          toast.error("You are not authorized to access this page.");
         }
       }
     } catch (error) {
@@ -196,3 +196,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
